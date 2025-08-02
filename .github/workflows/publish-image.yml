@@ -39,7 +39,7 @@ jobs:
             org.opencontainers.image.revision={{ sha }}
             org.opencontainers.image.source=https://github.com/modCAM/devcontainer/blob/${{ github.sha }}/Containerfile
             org.opencontainers.image.version={{commit_date 'YYYYMMDD'}}
-            org.opencontainers.image.url=${{ github.repositoryUrl }}
+            org.opencontainers.image.url=https://github.com/${{ github.repository }}.git"
           tags: |
             type=raw,value={{commit_date 'YYYYMMDD'}},enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
