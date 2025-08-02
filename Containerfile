@@ -24,7 +24,10 @@ ARG USERNAME=modcam
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
 
-LABEL title="modCAM development container"
+LABEL org.opencontainers.image.authors="Contributors to the modCAM project"
+LABEL org.opencontainers.image.description="An image for modCAM development. This image was created to have more control over software versions in the GitHub CI workflow."
+LABEL org.opencontainers.image.title="modCAM development container"
+LABEL org.opencontainers.image.vendor="modCAM"
 
 SHELL [ "/bin/bash", "-c" ]
 
