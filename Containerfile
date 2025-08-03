@@ -34,15 +34,15 @@ SHELL [ "/bin/bash", "-c" ]
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
 	useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}
 
-RUN apt update && apt upgrade -y && \
-	apt -y install \
+RUN apt-get update && apt-get upgrade -y && \
+	apt-get -y install \
 	curl git linux-libc-dev make ninja-build pkg-config software-properties-common \
 	tar unzip wget zip
 
 # GCC/G++
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
-	apt update && \
-	apt install -y gcc-${GCC_VERSION} g++-${GCC_VERSION} && \
+	apt-get update && \
+	apt-get install -y gcc-${GCC_VERSION} g++-${GCC_VERSION} && \
 	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VERSION} 30 && \
 	update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${GCC_VERSION} 30 && \
 	update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 && \
@@ -74,7 +74,7 @@ RUN wget https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION
 	rm -f /tmp/git-lfs.tar.gz && rm -rf /tmp/git-lfs-${GIT_LFS_VERSION}
 
 # Cleanup
-RUN apt autoremove && apt clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER ${USERNAME}
 
