@@ -36,8 +36,8 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} && \
 
 RUN apt-get update && apt-get upgrade -y && \
 	apt-get -y install \
-	curl git linux-libc-dev make ninja-build pkg-config software-properties-common \
-	tar unzip wget zip
+	curl doxygen git linux-libc-dev make ninja-build pkg-config \
+	software-properties-common tar unzip wget zip
 
 # GCC/G++
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
