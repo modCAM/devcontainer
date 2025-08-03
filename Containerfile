@@ -27,8 +27,8 @@ SHELL [ "/bin/bash", "-c" ]
 
 RUN apt-get update && apt-get upgrade -y && \
 	apt-get -y install \
-	curl doxygen git linux-libc-dev make ninja-build pkg-config \
-	software-properties-common tar unzip wget zip
+	curl doxygen git linux-libc-dev make ninja-build pkg-config python3-pip \
+	python3-venv software-properties-common tar unzip wget zip
 
 # GCC/G++
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
@@ -68,8 +68,14 @@ RUN wget https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION
 # vcpkg
 ENV VCPKG_ROOT=/root/vcpkg
 ENV PATH="${VCPKG_ROOT}:$PATH"
-RUN git clone https://github.com/microsoft/vcpkg.git && \
+RUN cd /root && \
+	git clone https://github.com/microsoft/vcpkg.git && \
 	./vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+# Sphinx
+RUN python3 -m venv /root/.venv && \
+	source /root/.venv/bin/activate && \
+	pip install breathe sphinx sphinx-book-theme
 
 # Cleanup
 RUN apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
