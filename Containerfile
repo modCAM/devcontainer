@@ -10,7 +10,6 @@
 
 ARG UBUNTU_VERSION=24.04
 FROM ubuntu:${UBUNTU_VERSION}
-RUN userdel -r ubuntu
 
 # Software versions
 ARG CMAKE_VERSION=4.0.3
@@ -19,20 +18,12 @@ ARG GIT_LFS_VERSION=3.7.0
 ARG LLVM_VERSION=18
 ARG UBUNTU_VERSION
 
-# User/group identity
-ARG USERNAME=modcam
-ARG USER_UID=1000
-ARG USER_GID=${USER_UID}
-
 LABEL org.opencontainers.image.authors="Contributors to the modCAM project"
 LABEL org.opencontainers.image.description="An image for modCAM development. This image was created to have more control over software versions in the GitHub CI workflow."
 LABEL org.opencontainers.image.title="modCAM development container"
 LABEL org.opencontainers.image.vendor="modCAM"
 
 SHELL [ "/bin/bash", "-c" ]
-
-RUN groupadd --gid ${USER_GID} ${USERNAME} && \
-	useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}
 
 RUN apt-get update && apt-get upgrade -y && \
 	apt-get -y install \
@@ -71,19 +62,14 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cm
 RUN wget https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz -q -O /tmp/git-lfs.tar.gz && \
 	tar -xzf /tmp/git-lfs.tar.gz -C /tmp && \
 	/tmp/git-lfs-${GIT_LFS_VERSION}/install.sh && \
+	git lfs install && \
 	rm -f /tmp/git-lfs.tar.gz && rm -rf /tmp/git-lfs-${GIT_LFS_VERSION}
 
-# Cleanup
-RUN apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-USER ${USERNAME}
-
-WORKDIR /home/${USERNAME}
-
-RUN git lfs install
-
 # vcpkg
-ENV VCPKG_ROOT=/home/${USERNAME}/vcpkg
+ENV VCPKG_ROOT=/root/vcpkg
 ENV PATH="${VCPKG_ROOT}:$PATH"
 RUN git clone https://github.com/microsoft/vcpkg.git && \
 	./vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+# Cleanup
+RUN apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
