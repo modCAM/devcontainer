@@ -12,7 +12,8 @@ ARG UBUNTU_VERSION=24.04
 FROM ubuntu:${UBUNTU_VERSION}
 
 # Software versions
-ARG CMAKE_VERSION=4.0.3
+ARG CMAKE_VERSION=4.1.0
+ARG DOXYGEN_VERSION=1.14.0
 ARG GCC_VERSION=13
 ARG GIT_LFS_VERSION=3.7.0
 ARG LLVM_VERSION=18
@@ -27,7 +28,7 @@ SHELL [ "/bin/bash", "-c" ]
 
 RUN apt-get update && apt-get upgrade -y && \
 	apt-get -y install \
-	curl doxygen git linux-libc-dev make ninja-build pkg-config python3-pip \
+	curl git linux-libc-dev make ninja-build pkg-config python3-pip \
 	python3-venv software-properties-common tar unzip wget zip
 
 # GCC/G++
@@ -71,6 +72,13 @@ ENV PATH="${VCPKG_ROOT}:$PATH"
 RUN cd /root && \
 	git clone https://github.com/microsoft/vcpkg.git && \
 	./vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+# Doxgen
+RUN wget https://www.doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz -q -O /tmp/doxygen.tar.gz && \
+	mkdir /tmp/doxygen && \
+	tar -xzf /tmp/doxygen.tar.gz -C /tmp/doxygen --strip-components=1 && \
+	make -C /tmp/doxygen install && \
+	rm -f /tmp/doxygen.tar.gz && rm -rf /tmp/doxygen/ /tmp/doxygen.tar.gz
 
 # Sphinx
 RUN python3 -m venv /root/.venv && \
