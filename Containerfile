@@ -84,7 +84,7 @@ RUN wget https://www.doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.g
 # Sphinx
 RUN python3 -m venv /root/.venv && \
 	source /root/.venv/bin/activate && \
-	pip install breathe sphinx sphinx-book-theme
+	pip install breathe==5.0.0a5 sphinx sphinx-book-theme
 
 # Cleanup
 RUN apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
