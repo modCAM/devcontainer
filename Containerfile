@@ -51,7 +51,8 @@ RUN wget https://apt.llvm.org/llvm.sh -q -O /tmp/llvm.sh && \
 	ln -s /usr/bin/clang++-${LLVM_VERSION} /usr/bin/clang++ && \
 	ln -s /usr/bin/clang-cl-${LLVM_VERSION} /usr/bin/clang-cl && \
 	ln -s /usr/bin/clang-tidy-${LLVM_VERSION} /usr/bin/clang-tidy && \
-	ln -s /usr/bin/clangd-${LLVM_VERSION} /usr/bin/clangd
+	ln -s /usr/bin/clangd-${LLVM_VERSION} /usr/bin/clangd && \
+	ln -s /usr/bin/clang-format-${LLVM_VERSION} /usr/bin/clang-format
 
 # CMake
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh -q -O /tmp/cmake-install.sh && \
